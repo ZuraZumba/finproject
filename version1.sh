@@ -233,7 +233,7 @@ check_commits() {
         # git push origin ${REPOSITORY_BRANCH_CODE}-ci-success 
         git add .
         git commit -m "sucses"
-        git switch $REPOSITORY_BRANCH_RELEASE
+        git switch origin/$REPOSITORY_BRANCH_RELEASE
         # git merge $REPOSITORY_BRANCH_CODE
         git branch
        
