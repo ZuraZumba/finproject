@@ -197,12 +197,8 @@ run_report(){
         rm $RESPONSE_PATH
         rm $REQUEST_PATH
         else
-            echo "NO ERROR CODE ADDED TO RELEASE BRANCH"
-            git checkout $REPOSITORY_BRANCH_CODE
-            git add .
-            git commit -m "TO $REPOSITORY_BRANCH_RELEASE"
-            git checkout $$REPOSITORY_BRANCH_RELEASE
-            git merge $REPOSITORY_BRANCH_CODE
+            echo "EVERYTHING OK, BYE!"
+           
         fi
 
 }
@@ -230,6 +226,19 @@ check_commits() {
     git switch $REPOSITORY_BRANCH_CODE
     run_test
     popd
+
+    if (( ($PYTEST_RESULT != 0) || ($BLACK_RESULT != 0) ))
+    then
+        git tag -a ${REPOSITORY_BRANCH_CODE}-ci-success -m "kargia"
+        git push origin ${REPOSITORY_BRANCH_CODE}-ci-success 
+        git add .
+        git commit -m "sucses"
+        git switch $REPOSITORY_BRANCH_RELEASE
+        git merge $REPOSITORY_BRANCH_CODE
+        # echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+    # else
+
+    fi
    
     run_report
     
@@ -238,21 +247,7 @@ check_commits() {
         echo "No new commits found. Sleeping for 15 seconds..."
     fi
 
-    if (( ($PYTEST_RESULT != 0) || ($BLACK_RESULT != 0) ))
-    then
-    # git tag -a ${REPOSITORY_BRANCH_CODE}-ci-success -m "kargia"
-    # git push origin ${REPOSITORY_BRANCH_CODE}-ci-success 
-    # popd
-    echo "NO ERROR CODE ADDED TO RELEASE BRANCH"
-            # git switch $REPOSITORY_BRANCH_CODE
-            # pushd $REPOSITORY_PATH_REPORT
-            git fetch
-            git add .
-            git commit -m "TO $REPOSITORY_BRANCH_RELEASE"
-            # git pull $CODE_REPO_URL
-            git switch $REPOSITORY_BRANCH_RELEASE
-            git merge $REPOSITORY_BRANCH_CODE
-    fi
+    
 }
 
 # Initialize the variable to store the last commit SHA
@@ -262,4 +257,3 @@ while true; do
     check_commits
     sleep 15
 done
-

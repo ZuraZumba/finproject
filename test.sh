@@ -198,11 +198,7 @@ run_report(){
         rm $REQUEST_PATH
         else
             echo "EVERYTHING OK, BYE!"
-            git checkout $REPOSITORY_BRANCH_CODE
-            git add .
-            git commit -m "TO $REPOSITORY_BRANCH_RELEASE"
-            git checkout $$REPOSITORY_BRANCH_RELEASE
-            git merge $REPOSITORY_BRANCH_CODE
+           
         fi
 
 }
