@@ -240,12 +240,16 @@ check_commits() {
 
     if (( ($PYTEST_RESULT != 0) || ($BLACK_RESULT != 0) ))
     then
-    # git tag ${REPOSITORY_BRANCH_CODE}-ci-success $LAST_COMMIT_SHA
+    # git tag -a ${REPOSITORY_BRANCH_CODE}-ci-success -m "kargia"
+    # git push origin ${REPOSITORY_BRANCH_CODE}-ci-success 
+    # popd
     echo "NO ERROR CODE ADDED TO RELEASE BRANCH"
             # git switch $REPOSITORY_BRANCH_CODE
+            # pushd $REPOSITORY_PATH_REPORT
+            git fetch
             git add .
             git commit -m "TO $REPOSITORY_BRANCH_RELEASE"
-            git pull $REPOSITORY_NAME_CODE
+            # git pull $CODE_REPO_URL
             git switch $REPOSITORY_BRANCH_RELEASE
             git merge $REPOSITORY_BRANCH_CODE
     fi
