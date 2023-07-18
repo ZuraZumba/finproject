@@ -245,7 +245,7 @@ check_commits() {
             # git switch $REPOSITORY_BRANCH_CODE
             git add .
             git commit -m "TO $REPOSITORY_BRANCH_RELEASE"
-            git pull $REPOSITORY_BRANCH_RELEASE
+            git pull $REPOSITORY_NAME_CODE
             git switch $REPOSITORY_BRANCH_RELEASE
             git merge $REPOSITORY_BRANCH_CODE
     fi
