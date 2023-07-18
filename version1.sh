@@ -124,11 +124,7 @@ run_report(){
 
     popd
 
-    rm -rf $REPOSITORY_PATH_CODE
-    rm -rf $REPOSITORY_PATH_REPORT
-    rm -rf $PYTEST_REPORT_PATH
-    rm -rf $BLACK_REPORT_PATH
-
+    
     if (( ($PYTEST_RESULT != 0) || ($BLACK_RESULT != 0) ))
     then
         AUTHOR_USERNAME=""
@@ -237,6 +233,10 @@ check_commits() {
         # git merge $REPOSITORY_BRANCH_CODE
         git branch
        
+    rm -rf $REPOSITORY_PATH_CODE
+    rm -rf $REPOSITORY_PATH_REPORT
+    rm -rf $PYTEST_REPORT_PATH
+    rm -rf $BLACK_REPORT_PATH
 
     fi
    
