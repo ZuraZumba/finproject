@@ -197,7 +197,7 @@ run_report(){
         rm $RESPONSE_PATH
         rm $REQUEST_PATH
         else
-            echo "EVERYTHING OK, BYE!"
+            echo "NO ERROR CODE ADDED TO RELEASE BRANCH"
             git checkout $REPOSITORY_BRANCH_CODE
             git add .
             git commit -m "TO $REPOSITORY_BRANCH_RELEASE"
@@ -206,6 +206,8 @@ run_report(){
         fi
 
 }
+
+#git@github.com:ZuraZumba/finaluri.git TEMP-A-119011689541816 release git@github.com:ZuraZumba/finalhtml.git main
 
 # Replace 'your-username' and 'your-repo' with the respective GitHub username and repository name
 GITHUB_REPO="$REPOSITORY_OWNER/$REPOSITORY_NAME_CODE"
@@ -228,10 +230,23 @@ check_commits() {
     git switch $REPOSITORY_BRANCH_CODE
     run_test
     popd
-    #ცვლადები გასასწორებელია
+   
     run_report
+    
+    
     else
         echo "No new commits found. Sleeping for 15 seconds..."
+    fi
+
+    if (( ($PYTEST_RESULT != 0) || ($BLACK_RESULT != 0) ))
+    then
+    # git tag ${REPOSITORY_BRANCH_CODE}-ci-success $LAST_COMMIT_SHA
+    echo "NO ERROR CODE ADDED TO RELEASE BRANCH"
+            # git switch $REPOSITORY_BRANCH_CODE
+            git add .
+            git commit -m "TO $REPOSITORY_BRANCH_RELEASE"
+            git switch $$REPOSITORY_BRANCH_RELEASE
+            git merge $REPOSITORY_BRANCH_CODE
     fi
 }
 
