@@ -193,7 +193,10 @@ run_report(){
         # https://docs.github.com/en/rest/issues/issues?apiVersion=2022-11-28#create-an-issue
         github_post_request "https://api.github.com/repos/${REPORT_OWNER}/${REPOSITORY_NAME_CODE}/issues" $REQUEST_PATH $RESPONSE_PATH
         #cat $RESPONSE_PATH
-        cat $RESPONSE_PATH | jq ".html_url"
+        # HTML_URL=$(echo "$USER_JSON" | jq -r '.html_url')
+        cat $RESPONSE_PATH | jq -r '.html_url'
+        # html_url=$(cat $RESPONSE_PATH | jq -r ".html_url")
+
         rm $RESPONSE_PATH
         rm $REQUEST_PATH
         else

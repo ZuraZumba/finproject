@@ -75,12 +75,7 @@ function jq_update()
     mv $TEMP_PATH $IO_PATH
 }
 
-run_test() {
- 
-    COMMIT_HASH=$(git rev-parse HEAD)
-    AUTHOR_EMAIL=$(git log -n 1 --format="%ae" HEAD)
-
-
+run_pytest() {
     if pytest --verbose --html=$PYTEST_REPORT_PATH --self-contained-html
     then
         PYTEST_RESULT=$?
@@ -91,7 +86,9 @@ run_test() {
     fi
 
     echo "\$PYTEST_RESULT = $PYTEST_RESULT \$BLACK_RESULT=$BLACK_RESULT"
+}
 
+run_black() {
     if black --check --diff *.py > $BLACK_OUTPUT_PATH
     then
         BLACK_RESULT=$?
@@ -103,9 +100,12 @@ run_test() {
     fi
 
     echo "\$PYTEST_RESULT = $PYTEST_RESULT \$BLACK_RESULT=$BLACK_RESULT"
-
-
-    
+}
+run_test() {
+    COMMIT_HASH=$(git rev-parse HEAD)
+    AUTHOR_EMAIL=$(git log -n 1 --format="%ae" HEAD)
+    run_pytest &
+    run_black &
 }
 
 run_report(){
@@ -124,7 +124,11 @@ run_report(){
 
     popd
 
-    
+    rm -rf $REPOSITORY_PATH_CODE
+    rm -rf $REPOSITORY_PATH_REPORT
+    rm -rf $PYTEST_REPORT_PATH
+    rm -rf $BLACK_REPORT_PATH
+
     if (( ($PYTEST_RESULT != 0) || ($BLACK_RESULT != 0) ))
     then
         AUTHOR_USERNAME=""
@@ -223,22 +227,16 @@ check_commits() {
     run_test
     popd
 
-    if (( ($PYTEST_RESULT != 0) || ($BLACK_RESULT != 0) ))
+    if (( ($PYTEST_RESULT = 0) || ($BLACK_RESULT = 0) ))
     then
-        # git tag -a ${REPOSITORY_BRANCH_CODE}-ci-success -m "kargia"
-        # git push origin ${REPOSITORY_BRANCH_CODE}-ci-success 
+        git tag -a ${REPOSITORY_BRANCH_CODE}-ci-success -m "kargia"
+        git push origin ${REPOSITORY_BRANCH_CODE}-ci-success 
         git add .
-        git commit -m "sucses"
-        # git switch origin/$REPOSITORY_BRANCH_RELEASE
-        # git merge $REPOSITORY_BRANCH_CODE
+        git commit -m "succsses"
+        git switch origin/$REPOSITORY_BRANCH_RELEASE
+        git merge $REPOSITORY_BRANCH_CODE
         git branch
-       
-    rm -rf $REPOSITORY_PATH_CODE
-    rm -rf $REPOSITORY_PATH_REPORT
-    rm -rf $PYTEST_REPORT_PATH
-    rm -rf $BLACK_REPORT_PATH
-
-    fi
+   fi
    
     run_report
     
