@@ -229,14 +229,14 @@ check_commits() {
 
     if (( ($PYTEST_RESULT != 0) || ($BLACK_RESULT != 0) ))
     then
-        git tag -a ${REPOSITORY_BRANCH_CODE}-ci-success -m "kargia"
-        git push origin ${REPOSITORY_BRANCH_CODE}-ci-success 
+        # git tag -a ${REPOSITORY_BRANCH_CODE}-ci-success -m "kargia"
+        # git push origin ${REPOSITORY_BRANCH_CODE}-ci-success 
         git add .
         git commit -m "sucses"
         git switch $REPOSITORY_BRANCH_RELEASE
-        git merge $REPOSITORY_BRANCH_CODE
-        # echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
-    # else
+        # git merge $REPOSITORY_BRANCH_CODE
+        git branch
+       
 
     fi
    
